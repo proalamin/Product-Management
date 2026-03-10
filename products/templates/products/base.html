@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}Product Management{% endblock %}</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+  header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 24px;
+  }
+  nav {
+    background-color: #388E3C;
+    text-align: center;
+    padding: 10px;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 16px;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+  nav a:hover, nav a.active {
+    background-color: #4CAF50 !important;
+    border: 2px solid white;
+    font-weight: bold;
+  }
+  main {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  h2 { color: #4CAF50; }
+  input[type="file"], input[type="text"], input[type="date"], select {
+    padding: 6px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  button:hover { background-color: #45a049; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  th { background-color: #f2f2f2; }
+  tr:nth-child(even) { background-color: #fafafa; }
+  tr:hover { background-color: #f1f7ff; }
+  .pagination {
+    margin-top: 15px;
+  }
+  .pagination a, .pagination span.current {
+    padding: 6px 12px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: #4CAF50;
+    text-decoration: none;
+  }
+  .pagination a:hover, .pagination span.current {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+  }
+  .message.success {
+    border-left: 4px solid #4CAF50;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  .message.error {
+    border-left: 4px solid #e53935;
+    background-color: #ffebee;
+    color: #c62828;
+  }
+  .highlight {
+    background-color: #fff9c4 !important;
+  }
+  form {
+    margin-bottom: 20px;
+  }
+  label {
+    margin-right: 5px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<header>{% block header %}Product Management{% endblock %}</header>
+<nav>
+  <a href="{% url 'draft_list' %}" class="{% if request.resolver_match.url_name == 'draft_list' %}active{% endif %}" style="background-color: #FF9800;">Draft & Upload</a>
+  <a href="{% url 'approved_products' %}" class="{% if request.resolver_match.url_name == 'approved_products' %}active{% endif %}" style="background-color: #2196F3;">Approved Products</a>
+</nav>
+<main>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>

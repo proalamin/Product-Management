@@ -1,0 +1,77 @@
+{% extends "products/base.html" %}
+
+{% block title %}Draft & Upload{% endblock %}
+{% block header %}Draft & Upload{% endblock %}
+
+{% block content %}
+<h2>Upload Excel File</h2>
+<form method="post" action="{% url 'upload_excel' %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  <label>Choose Excel File (.xlsx):</label>
+  {{ form.file }}
+  <button type="submit">Upload</button>
+</form>
+
+<hr>
+
+<h2>Draft Products</h2>
+{% if page_obj %}
+<table>
+  <thead>
+    <tr>
+      <th>Product ID</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Last Updated</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in page_obj %}
+    <tr>
+      <td>{{ product.product_id }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.category }}</td>
+      <td>{{ product.price }}</td>
+      <td>{{ product.quantity }}</td>
+      <td>{{ product.last_updated|date:"Y-m-d H:i" }}</td>
+      <td>
+        {% if product.status == 'Approved' %}
+          <span style="color: green; font-weight: bold;">Approved</span>
+        {% else %}
+          <span style="color: orange; font-weight: bold;">Draft</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if product.status == 'Draft' %}
+        <form method="post" action="{% url 'approve_product' product.product_id %}">
+          {% csrf_token %}
+          <button type="submit">Approve</button>
+        </form>
+        {% else %}
+          —
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="pagination">
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+  {% endif %}
+
+  <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+  {% endif %}
+</div>
+{% else %}
+  <p>No draft products found. Upload an Excel file to get started.</p>
+{% endif %}
+{% endblock %}
